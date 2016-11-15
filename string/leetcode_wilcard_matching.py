@@ -10,11 +10,11 @@ class Solution(object):
         state_mat = [[False, ] * (len(s)+1) for _ in range(len(p)+1)]
         state_mat[0][0] = True
 
-        i = 0
-        while i < len(p):
+        j = 0
+        while j < len(p):
             # state_mat[j+1][0] = (state_mat[j][0] or state_mat[j-1][0]) and p[j]=='*'
             state_mat[j+1][0] = (state_mat[j][0]) and p[j]=='*'
-            i += 1
+            j += 1
 
         i = 0
         while i < len(s):
