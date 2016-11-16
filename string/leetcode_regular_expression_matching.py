@@ -51,8 +51,7 @@ class Solution(object):
 
         state_mat[0][0] = True
         for j in range(0, len(p)):
-            if p[j] == '*':
-                state_mat[j+1][0] = state_mat[j-1][0]
+            state_mat[j+1][0] = p[j] == '*' and state_mat[j-1][0]
 
         for j in range(len(p)):
             for i in range(len(s)):

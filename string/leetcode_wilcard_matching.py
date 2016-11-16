@@ -26,7 +26,7 @@ class Solution(object):
                 if s[i] == p[j] or p[j] == '?':
                     # print('1', i, j)
                     state_mat[j+1][i+1] = state_mat[j][i]
-                elif p[j] == '*':
+                elif p[j] == '*': # 要么匹配包括当前在内得多个, 要么匹配空
                     state_mat[j+1][i+1] = state_mat[j+1][i] or state_mat[j][i+1]
         return state_mat[-1][-1]
 
