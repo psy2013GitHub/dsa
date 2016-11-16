@@ -23,18 +23,11 @@ class Solution(object):
 
         for j in range(len(p)):
             for i in range(len(s)):
-                if s[i] == p[j]:
+                if s[i] == p[j] or p[j] == '?':
                     # print('1', i, j)
                     state_mat[j+1][i+1] = state_mat[j][i]
-                elif p[j] == '?':
-                    state_mat[j+1][i+1] = state_mat[j][i]
-                    # print('2', i, j)
                 elif p[j] == '*':
                     state_mat[j+1][i+1] = state_mat[j+1][i] or state_mat[j][i+1]
-                # else:
-                #     state_mat[j+1][i+1] = False
-                #     print('4', i, j)
-        # print(state_mat)
         return state_mat[-1][-1]
 
 if __name__ == '__main__':
