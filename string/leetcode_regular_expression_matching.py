@@ -1,46 +1,10 @@
 __author__ = 'flappy'
 
-class Solution1(object):
-    def isMatch(self, s, p):
-        if s == p:
-            return True
-        m = len(s)
-        n = len(p)
-
-        T = [[False for j in range(n+1)] for i in range(m+1)]
-
-        T[0][0] = True
-
-        #  Deals with patterns like a* or a*b* or a*b*c*
-        for i in range(1, n+1):
-            if p[i-1] == '*':
-                T[0][i] = T[0][i-2]
-
-        if not s:
-            return T[-1][-1]
-
-        s = " "+s
-        p = " "+p
-
-
-        for i in range(1, m+1):
-            for j in range(1, n+1):
-
-                if s[i] == p[j] or p[j] == '.':
-                    T[i][j] = T[i-1][j-1]
-
-                elif p[j] == '*':
-                    if j > 1:
-                        T[i][j] = T[i][j-2]
-
-                    if s[i] == p[j-1] or p[j-1] == '.':
-                        T[i][j] = T[i][j] or T[i-1][j]
-                else:
-                    T[i][j]  = False
-
-        return T[i][j]
-
 class Solution(object):
+    def isMatch(self, s, p):
+        pass
+
+class DPSolution(Solution):
     def isMatch(self, s, p):
         """
         :type s: str
@@ -75,14 +39,77 @@ class Solution(object):
 
         return state_mat[-1][-1]
 
-if __name__ == '__main__':
-    solution = Solution()
+class RecursiveSolution(Solution):
+     def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        return self.helper(s, p, 0, 0)
+        # return self.helper1(s, 0, p, 0)
+
+     def helper(self, s, p, curr_s_pos, curr_p_pos):
+         ret = False
+         # if curr_s_pos >= len(s): # s 读完, 就看p是不是 a*b*c*得形式
+         #     while curr_p_pos < len(p):
+         #         if p[curr_p_pos]=='*':
+         #             curr_p_pos += 1
+         #         elif curr_p_pos + 1 < len(p) and p[curr_p_pos+1] == '*':
+         #             curr_p_pos += 2
+         #         else:
+         #             return False
+         #     return True
+         if curr_s_pos >= len(s) or curr_p_pos >= len(p):
+             print(1, curr_s_pos, curr_p_pos)
+             return curr_s_pos >= len(s) and curr_p_pos >= len(p)
+
+         if curr_p_pos+1 < len(p) and p[curr_p_pos+1] == '*':
+             if curr_s_pos < len(s) and (s[curr_s_pos]==p[curr_p_pos] or p[curr_p_pos]=='.'): # 匹配多个
+                ret = self.helper(s, p, curr_s_pos+1, curr_p_pos)
+             ret = ret or self.helper(s, p, curr_s_pos, curr_p_pos+2) # s已经读完, 或者匹配0个
+         # !!! below condition, you can't write: `curr_p_pos < len(p) and curr_s_pos < len(s) and s[curr_s_pos]==p[curr_p_pos] or p[curr_p_pos]=='.'`
+         # if so, you may get out of index error, because python will calculate `p[curr_p_pos]=='.'` first
+         elif curr_p_pos < len(p) and curr_s_pos < len(s) and (s[curr_s_pos]==p[curr_p_pos] or p[curr_p_pos]=='.'):
+                ret = self.helper(s, p, curr_s_pos+1, curr_p_pos+1) # 匹配char by char
+         else:
+             return False
+         return ret
+
+     def helper1(self, s, si, p, pi):
+         if si == len(s) and p == len(p):
+             return True
+         if pi+1<len(p) and p[pi+1] == '*':
+            return self.helper1(s,si,p,pi+2) or ((s[si]==p[pi] or p[pi]=='.') and si<len(s) and self.helper1(s,si+1,p,pi)); #//match 1 or more occurence case
+         else:
+            return (si<len(s) and (s[si]==p[pi] or p[pi]=='.')) and self.helper1(s, si+1, p, pi+1) #//match char by char case
+
+
+def test(solution):
+    # print(solution.isMatch('aa', '.*'))
     # print(solution.isMatch('aa', 'a*'))
+    # print(solution.isMatch('aa', 'a'))
     # print(solution.isMatch('aaa', 'a*'))
     # print(solution.isMatch('aaa', 'a*'))
     # print(solution.isMatch('ab', 'c*a*b*'))
     # print(solution.isMatch('abcd', 'd*'))
     # print(solution.isMatch('abcd', 'abdc'))
-    print(solution.isMatch('aaa', 'ab*a*c*a'))
+    # print(solution.isMatch('aaa', 'ab*a*c*a'))
+    s, p = "aaaaaaaaaaaaab", "a*a*a*a*a*a*a*a*a*a*c"
+    # print(s[13], p[14])
+    print(solution.isMatch(s, p))
+
+def testDP():
+    solution = DPSolution()
+    test(solution)
+
+def testRecursive():
+    solution = RecursiveSolution()
+    test(solution)
+
+
+if __name__ == '__main__':
+    # testDP()
+    testRecursive()
 
 
