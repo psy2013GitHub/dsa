@@ -40,6 +40,7 @@ class DPSolution(Solution):
         return state_mat[-1][-1]
 
 class RecursiveSolution(Solution):
+     # !!! because, `string` is immutable object, python will pass by value on every recursive call, recursive solution is quite slow
      def isMatch(self, s, p):
         """
         :type s: str
@@ -51,15 +52,6 @@ class RecursiveSolution(Solution):
 
      def helper(self, s, p, curr_s_pos, curr_p_pos):
          ret = False
-         # if curr_s_pos >= len(s): # s 读完, 就看p是不是 a*b*c*得形式
-         #     while curr_p_pos < len(p):
-         #         if p[curr_p_pos]=='*':
-         #             curr_p_pos += 1
-         #         elif curr_p_pos + 1 < len(p) and p[curr_p_pos+1] == '*':
-         #             curr_p_pos += 2
-         #         else:
-         #             return False
-         #     return True
          if curr_s_pos >= len(s) or curr_p_pos >= len(p):
              print(1, curr_s_pos, curr_p_pos)
              return curr_s_pos >= len(s) and curr_p_pos >= len(p)
