@@ -40,7 +40,7 @@ class DPSolution(Solution):
         return state_mat[-1][-1]
 
 class RecursiveSolution(Solution):
-     # !!! because, `string` is immutable object, python will pass by value on every recursive call, recursive solution is quite slow
+     # !!! because `string` is immutable object, python will pass by value on every recursive call, as a result, recursive solution is quite slow
      def isMatch(self, s, p):
         """
         :type s: str
