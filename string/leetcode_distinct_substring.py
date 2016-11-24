@@ -2,7 +2,6 @@
 __author__ = 'flappy'
 
 class Solution(object):
-    class Solution(object):
         def numDistinct(self, s, t):
             """
             :type s: str
