@@ -5,6 +5,9 @@ __author__ = 'flappy'
 class Solution(object):
     def isNumber(self, s):
         """
+            这种问题一般dfa，值得注意得是：
+                1，dfa状态合并问题，
+                2，只画有用得路径，
         :type s: str
         :rtype: bool
         """
