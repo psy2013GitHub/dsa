@@ -24,12 +24,61 @@ All words contain only lowercase alphabetic characters.
 
 class Solution(object):
     def findLadders(self, beginWord, endWord, wordlist):
+         # Write your code here
+        start, end, dict = beginWord, endWord, wordlist
+        dict.add(start)
+        dict.add(end)
+
+        def buildPath(path,word):
+            if len(preMap[word]) == 0:
+                result.append([word] + path)
+                return
+            path.insert(0,word)
+            for w in preMap[word]:
+                buildPath(path,w)
+            path.pop(0)
+
+        length = len(start)
+        preMap = {}
+        for word in dict:
+            preMap[word] = []
+        result = []
+        cur_level = set()
+        cur_level.add(start)
+
+        # bfs 建立前向映射
+        while True:
+            pre_level = cur_level
+            cur_level = set()
+            for word in pre_level:
+                dict.remove(word) # 出现过得词就删掉,防止重复出现,tle_findLadders就没有解决好。。。
+            for word in pre_level:
+                for i in range(length):
+                    left = word[:i]
+                    right = word[i+1:]
+                    for c in 'abcdefghijklmnopqrstuvwxyz':
+                        if c != word[i]:
+                            nextWord = left + c + right
+                            if nextWord in dict:
+                                preMap[nextWord].append(word)
+                                cur_level.add(nextWord)
+            if len(cur_level) == 0:
+                return []
+            if end in cur_level:
+                break
+        print(preMap)
+        buildPath([],end)
+        return result
+
+    def tle_findLadders(self, beginWord, endWord, wordlist):
         """
+            tle 了。。。
         :type beginWord: str
         :type endWord: str
         :type wordlist: Set[str]
         :rtype: List[List[int]]
         """
+        wordlist = list(wordlist)
         transform_dict = self.transform_dict(wordlist)
         for w in wordlist:
             if self.is_transformable(endWord, w) == 1:
@@ -37,14 +86,14 @@ class Solution(object):
                 transform_dict[w].add(endWord)
         # print(transform_dict)
         if beginWord == endWord: return [[beginWord, endWord],]
-        if self.is_transformable(beginWord, endWord): return [[beginWord, endWord],]
+        if self.is_transformable(beginWord, endWord)==1: return [[beginWord, endWord],]
 
         possible_paths = []
         for w in wordlist:
             if self.is_transformable(beginWord, w) == 1:
                 self.helper(w, endWord, transform_dict, [beginWord, ], possible_paths)
 
-        print(possible_paths)
+        print('possible_paths', possible_paths)
 
         res, min_path = [], -1
         for path in possible_paths:
@@ -100,13 +149,13 @@ class Solution(object):
 def test():
     solution = Solution()
     def Print(beginWord, endWord, wordlist):
-        print(beginWord, endWord, wordlist, solution.findLadders(beginWord, endWord, wordlist))
+        print(beginWord, endWord, wordlist, solution.tle_findLadders(beginWord, endWord, wordlist))
 
-    Print("hit", "cog", ["hot","dot","dog","lot","log"])
+    Print("hit", "cog", {"hot","dot","dog","lot","log"})
     # [
     #     ["hit","hot","dot","dog","cog"],
     #     ["hit","hot","lot","log","cog"]
     # ]
-    Print('a', 'c', ['a', 'b', 'c'])
+    Print('a', 'c', {'a', 'b', 'c'})
 if __name__ == '__main__':
     test()
