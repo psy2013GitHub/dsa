@@ -30,7 +30,7 @@ class Solution(object):
                 for i in range(maxWidth - num_of_chars):
                     cur[i%(len(cur)-1 or 1)] += ' ' # 轮转加' '
                 res.append(''.join(cur))
-                cur, num_of_letters = [], 0
+                cur, num_of_chars = [], 0
             cur.append(w)
             num_of_chars += len(w)
         res.append(' '.join(cur).ljust(maxWidth))
@@ -38,7 +38,7 @@ class Solution(object):
 
 def test():
     solution = Solution()
-    print(solution.fullJustify(["This", "is", "an", "example", "of", "text", "justification."], 16))
+    print(solution.fullJustify(["a","b","c","d","e"], 3))
 
 
 if __name__ == '__main__':
