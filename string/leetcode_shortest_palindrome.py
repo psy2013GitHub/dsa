@@ -25,6 +25,7 @@ class Solution(object):
 def test():
     solution = Solution()
     assert solution.shortestPalindrome("aacecaaa")=="aaacecaaa"
+    print(solution.shortestPalindrome("bbcecaaa"))
     assert solution.shortestPalindrome("abcd")=="dcbabcd"
 
 if __name__ == '__main__':
