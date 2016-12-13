@@ -1,30 +1,25 @@
-# -*- encoding: utf8 -*-
-
 # Definition for a binary tree node.
-class TreeNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
 
 class Solution(object):
-    def maxDepth(self, root):
+    def isBalanced(self, root):
         """
         :type root: TreeNode
-        :rtype: int
+        :rtype: bool
         """
-        if not root: return 0
-        return self.helper(root)
+        if not root: return True
+        tag = [True, ] # tag, pass by reference in python
+        self.helper(root, tag)
+        return tag[-1]
 
-    def helper(self, node):
-        if self.is_leaf(node): return 1
-        if not node.left:
-            return 1 + self.helper(node.right)
-        elif not node.right:
-            return 1 + self.helper(node.left)
-        else:
-            return 1 + max(self.helper(node.left), self.helper(node.right))
-
-    def is_leaf(self, node):
-        return node and (not node.left and not node.right)
+    def helper(self, root, tag):
+        if not root:
+            return 0
+        h1, h2 = self.helper(root.left, tag), self.helper(root.right, tag)
+        if h1 - h2 < -1 or h1 - h2 > 1:
+            tag[-1] = False
+        return 1 + max(h1, h2)
